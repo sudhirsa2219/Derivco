@@ -15,8 +15,8 @@ IConfiguration configuration = config.Build();
 var builder = WebApplication.CreateBuilder(args);
 
 
-var connectionString = configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddSingleton(new DapperContext(connectionString))
+//var connectionString = configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddSingleton<DapperContext>()
     .AddScoped<BetRepository>()
     .AddScoped<SpinRepository>()
     .AddSingleton<RouletteService>()
