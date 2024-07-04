@@ -19,7 +19,7 @@ var connectionString = configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddSingleton(new DapperContext(connectionString))
     .AddScoped<BetRepository>()
     .AddScoped<SpinRepository>()
-    .AddScoped<RouletteService>()
+    .AddSingleton<RouletteService>()
     .AddMediatR(config => {
         config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
     })

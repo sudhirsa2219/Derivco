@@ -1,7 +1,10 @@
 ﻿using Carter;
 using MediatR;
+using Microsoft.AspNetCore.Components.Forms;
 using RouletteGame.Domain.Commands;
+using RouletteGame.Domain.Queries;
 using RouletteGame.Services;
+using System.Xml.Linq;
 
 namespace RouletteGame.WebApi
 {
@@ -9,17 +12,23 @@ namespace RouletteGame.WebApi
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("/register", async (HttpContext http, IMediator mediator) =>
+            app.MapPost("/register", async (string name, IMediator mediator) =>
             {
-                var name = http.Request.Query["name"].ToString();
+                //var name = http.Request.Query["name"].ToString();
                 var player = await mediator.Send(new RegisterPlayerCommand(name));
-                await http.Response.WriteAsJsonAsync(player);
+                return Results.Ok(player);
             });
 
-            app.MapGet("/player/{playerId}", (string playerId, RouletteService rouletteService) =>
+            app.MapGet("/player/{playerId}", async (string playerId, IMediator mediator) =>
             {
-                var player = rouletteService.GetPlayer(playerId);
+                var player = await mediator.Send(new GetPlayerQuery(playerId));
                 return player != null ? Results.Ok(player) : Results.NotFound();
+            });
+
+            app.MapGet("/allplayers/", async (IMediator mediator) =>
+            {
+                var players = await mediator.Send(new GetAllPlayersQuery());
+                return players != null ? Results.Ok(players) : Results.NotFound();
             });
 
             app.MapPost("/join/{playerId}", async (string playerId, IMediator mediator) =>

@@ -32,7 +32,12 @@ namespace RouletteGame.Services
             return player;
         }
 
-        public void JoinGame(string playerId)
+        public List<Player> GetAllPlayers()
+        {
+            return players.Values.ToList();
+        }
+
+        public bool JoinGame(string playerId)
         {
             if (players.TryGetValue(playerId, out var player))
             {
@@ -41,7 +46,10 @@ namespace RouletteGame.Services
                 {
                     StartBetting();
                 }
+                return player.HasJoined;
             }
+            else
+                return false;
         }
 
         public void WithdrawFromGame(string playerId)
@@ -52,7 +60,7 @@ namespace RouletteGame.Services
             }
         }
 
-        public void PlaceBets(string playerId, List<Bet> bets)
+        public bool PlaceBets(string playerId, List<Bet> bets)
         {
             if (players.TryGetValue(playerId, out var player))
             {
@@ -65,7 +73,11 @@ namespace RouletteGame.Services
                     throw new InvalidOperationException($"A player cannot place more than {MaxBetsPerPlayer} bets per spin.");
                 }
                 player.Bets.AddRange(bets);
+
+                return true;
             }
+            else
+                return false;
         }
 
         private void StartBetting()

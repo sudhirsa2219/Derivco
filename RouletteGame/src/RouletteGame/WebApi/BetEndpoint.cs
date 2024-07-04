@@ -9,9 +9,8 @@ namespace RouletteGame.WebApi
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("/bets/{playerId}", async (HttpContext http, string playerId, IMediator mediator) =>
+            app.MapPost("/bets/{playerId}", async (List<Bet> bets, string playerId, IMediator mediator) =>
             {
-                var bets = await http.Request.ReadFromJsonAsync<List<Bet>>();
                 await mediator.Send(new PlaceBetsCommand(playerId, bets));
                 return Results.Ok();
             });

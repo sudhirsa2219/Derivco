@@ -2,5 +2,5 @@
 
 namespace RouletteGame.Domain.Commands
 {
-    public record JoinGameCommand(string PlayerId) : IRequest;
+    public record JoinGameCommand(string PlayerId) : IRequest<bool>;
 }

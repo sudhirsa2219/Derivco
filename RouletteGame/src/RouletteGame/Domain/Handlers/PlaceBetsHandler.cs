@@ -4,7 +4,7 @@ using RouletteGame.Services;
 
 namespace RouletteGame.Domain.Handlers
 {
-    public class PlaceBetsHandler : IRequestHandler<PlaceBetsCommand>
+    public class PlaceBetsHandler : IRequestHandler<PlaceBetsCommand,bool>
     {
         private readonly RouletteService _rouletteService;
 
@@ -13,10 +13,10 @@ namespace RouletteGame.Domain.Handlers
             _rouletteService = rouletteService;
         }
 
-        public Task Handle(PlaceBetsCommand request, CancellationToken cancellationToken)
+        public Task<bool> Handle(PlaceBetsCommand request, CancellationToken cancellationToken)
         {
-            _rouletteService.PlaceBets(request.PlayerId, request.Bets);
-            return Task.FromResult(Unit.Value);
+            var res = _rouletteService.PlaceBets(request.PlayerId, request.Bets);
+            return Task.FromResult(res);
         }
     }
 }

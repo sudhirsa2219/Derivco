@@ -4,7 +4,7 @@ using RouletteGame.Services;
 
 namespace RouletteGame.Domain.Handlers
 {
-    public class JoinGameHandler : IRequestHandler<JoinGameCommand>
+    public class JoinGameHandler : IRequestHandler<JoinGameCommand,bool>
     {
         private readonly RouletteService _rouletteService;
 
@@ -13,10 +13,10 @@ namespace RouletteGame.Domain.Handlers
             _rouletteService = rouletteService;
         }
 
-        public Task Handle(JoinGameCommand request, CancellationToken cancellationToken)
+        public Task<bool> Handle(JoinGameCommand request, CancellationToken cancellationToken)
         {
-            _rouletteService.JoinGame(request.PlayerId);
-            return Task.FromResult(Unit.Value);
+            var res = _rouletteService.JoinGame(request.PlayerId);
+            return Task.FromResult(res);
         }
     }
 }
